@@ -1,6 +1,9 @@
 const API_BASE = process.env.NODE_ENV === 'production' 
-  ? '/.netlify/functions/expenses-simple'
-  : 'http://localhost:8888/.netlify/functions/expenses-simple'
+  ? '/.netlify/functions/expenses-secure'
+  : 'http://localhost:8888/.netlify/functions/expenses-secure'
+
+// API key for secure operations
+const API_KEY = 'velilaskin-secret-key-2025'
 
 export const api = {
   async getExpenses() {
@@ -31,6 +34,7 @@ export const api = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': API_KEY,
         },
         body: JSON.stringify(expense),
       })
@@ -54,6 +58,7 @@ export const api = {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': API_KEY,
         },
         body: JSON.stringify({ id }),
       })
@@ -77,6 +82,7 @@ export const api = {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': API_KEY,
         },
         body: JSON.stringify({ clearAll: true }),
       })
