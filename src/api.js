@@ -13,15 +13,15 @@ export const api = {
       })
       
       if (!response.ok) {
-        throw new Error('Failed to fetch expenses')
+        throw new Error(`Failed to fetch expenses: ${response.status}`)
       }
       
-      return await response.json()
+      const data = await response.json()
+      console.log('Fetched expenses from server:', data.length)
+      return data
     } catch (error) {
       console.error('API Error:', error)
-      // Fallback to localStorage if server is unavailable
-      const savedExpenses = localStorage.getItem('velilaskin-expenses')
-      return savedExpenses ? JSON.parse(savedExpenses) : []
+      throw new Error('Failed to load expenses from server. Please try again.')
     }
   },
 
@@ -36,19 +36,15 @@ export const api = {
       })
       
       if (!response.ok) {
-        throw new Error('Failed to add expense')
+        throw new Error(`Failed to add expense: ${response.status}`)
       }
       
-      return await response.json()
+      const data = await response.json()
+      console.log('Added expense to server:', data)
+      return data
     } catch (error) {
       console.error('API Error:', error)
-      // Fallback to localStorage
-      const savedExpenses = localStorage.getItem('velilaskin-expenses')
-      const expenses = savedExpenses ? JSON.parse(savedExpenses) : []
-      const newExpense = { ...expense, id: Date.now() }
-      expenses.push(newExpense)
-      localStorage.setItem('velilaskin-expenses', JSON.stringify(expenses))
-      return newExpense
+      throw new Error('Failed to add expense to server. Please try again.')
     }
   },
 
@@ -63,18 +59,15 @@ export const api = {
       })
       
       if (!response.ok) {
-        throw new Error('Failed to delete expense')
+        throw new Error(`Failed to delete expense: ${response.status}`)
       }
       
-      return await response.json()
+      const data = await response.json()
+      console.log('Deleted expense from server:', data)
+      return data
     } catch (error) {
       console.error('API Error:', error)
-      // Fallback to localStorage
-      const savedExpenses = localStorage.getItem('velilaskin-expenses')
-      const expenses = savedExpenses ? JSON.parse(savedExpenses) : []
-      const filteredExpenses = expenses.filter(expense => expense.id !== id)
-      localStorage.setItem('velilaskin-expenses', JSON.stringify(filteredExpenses))
-      return { message: 'Expense deleted' }
+      throw new Error('Failed to delete expense from server. Please try again.')
     }
   },
 
@@ -89,15 +82,15 @@ export const api = {
       })
       
       if (!response.ok) {
-        throw new Error('Failed to clear expenses')
+        throw new Error(`Failed to clear expenses: ${response.status}`)
       }
       
-      return await response.json()
+      const data = await response.json()
+      console.log('Cleared all expenses from server:', data)
+      return data
     } catch (error) {
       console.error('API Error:', error)
-      // Fallback to localStorage
-      localStorage.removeItem('velilaskin-expenses')
-      return { message: 'All expenses cleared' }
+      throw new Error('Failed to clear expenses from server. Please try again.')
     }
   }
 } 
