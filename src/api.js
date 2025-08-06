@@ -1,6 +1,6 @@
 const API_BASE = process.env.NODE_ENV === 'production' 
-  ? '/.netlify/functions/expenses-secure'
-  : 'http://localhost:8888/.netlify/functions/expenses-secure'
+  ? '/.netlify/functions/expenses-mongo'
+  : 'http://localhost:8888/.netlify/functions/expenses-mongo'
 
 // API key for secure operations
 const API_KEY = 'velilaskin-secret-key-2025'
