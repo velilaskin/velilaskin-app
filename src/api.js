@@ -1,6 +1,6 @@
 const API_BASE = process.env.NODE_ENV === 'production' 
-  ? '/.netlify/functions/expenses-global'
-  : 'http://localhost:8888/.netlify/functions/expenses-global'
+  ? '/.netlify/functions/expenses-simple'
+  : 'http://localhost:8888/.netlify/functions/expenses-simple'
 
 export const api = {
   async getExpenses() {
