@@ -18,21 +18,18 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    // Use a truly global store with explicit site ID
-    const store = getStore('velilaskin-global-expenses', {
-      siteID: process.env.NETLIFY_SITE_ID || 'velilaskin-app',
-      token: process.env.NETLIFY_ACCESS_TOKEN
-    })
-    const key = 'shared-expenses-data'
+    // Try using a different store approach
+    const store = getStore('global-expenses-store')
+    const key = 'all-expenses'
 
-    console.log('Function called:', event.httpMethod, 'Site ID:', process.env.NETLIFY_SITE_ID)
+    console.log('Global function called:', event.httpMethod)
 
     switch (event.httpMethod) {
       case 'GET':
         // Get all expenses
         const data = await store.get(key)
         const expenses = data ? JSON.parse(data) : []
-        console.log('GET: Retrieved', expenses.length, 'expenses from store')
+        console.log('GET: Retrieved', expenses.length, 'expenses from global store')
         return {
           statusCode: 200,
           headers: { ...headers, 'Content-Type': 'application/json' },
@@ -94,7 +91,7 @@ exports.handler = async (event, context) => {
         }
     }
   } catch (error) {
-    console.error('Function error:', error)
+    console.error('Global function error:', error)
     return {
       statusCode: 500,
       headers,
