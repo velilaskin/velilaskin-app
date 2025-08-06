@@ -2,10 +2,6 @@
   publish = "dist"
   functions = "netlify/functions"
 
-[functions]
-  # Increase memory allocation for better performance
-  memory = 1024
-
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
