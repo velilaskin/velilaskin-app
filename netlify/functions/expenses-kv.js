@@ -18,14 +18,16 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const store = getStore('velilaskin-expenses')
-    const key = 'expenses'
+    // Use a global store with a specific site ID to ensure persistence across all users
+    const store = getStore('velilaskin-global-expenses')
+    const key = 'shared-expenses-data'
 
     switch (event.httpMethod) {
       case 'GET':
         // Get all expenses
         const data = await store.get(key)
         const expenses = data ? JSON.parse(data) : []
+        console.log('GET: Retrieved', expenses.length, 'expenses')
         return {
           statusCode: 200,
           headers: { ...headers, 'Content-Type': 'application/json' },
@@ -44,6 +46,7 @@ exports.handler = async (event, context) => {
         const updatedExpenses = [...existingExpenses, newExpense]
         
         await store.set(key, JSON.stringify(updatedExpenses))
+        console.log('POST: Added expense, total now:', updatedExpenses.length)
         
         return {
           statusCode: 201,
@@ -57,6 +60,7 @@ exports.handler = async (event, context) => {
         
         if (clearAll) {
           await store.set(key, JSON.stringify([]))
+          console.log('DELETE: Cleared all expenses')
           return {
             statusCode: 200,
             headers: { ...headers, 'Content-Type': 'application/json' },
@@ -69,6 +73,7 @@ exports.handler = async (event, context) => {
           const filteredExpenses = existingExpenses.filter(expense => expense.id !== id)
           
           await store.set(key, JSON.stringify(filteredExpenses))
+          console.log('DELETE: Removed expense, total now:', filteredExpenses.length)
           return {
             statusCode: 200,
             headers: { ...headers, 'Content-Type': 'application/json' },
@@ -88,7 +93,7 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Internal server error' })
+      body: JSON.stringify({ error: 'Internal server error', details: error.message })
     }
   }
 } 
