@@ -1,8 +1,15 @@
 // Simple in-memory storage with API key protection
 let expenses = []
+let lastActivity = Date.now()
 
 // Simple API key (in production, use environment variables)
 const API_KEY = 'velilaskin-secret-key-2025'
+
+// Keep-alive mechanism to prevent function from going cold
+function updateActivity() {
+  lastActivity = Date.now()
+  console.log('Function activity updated:', new Date(lastActivity).toISOString())
+}
 
 exports.handler = async (event, context) => {
   // Enable CORS
@@ -34,8 +41,9 @@ exports.handler = async (event, context) => {
     }
   }
 
-  try {
-    console.log('Secure function called:', event.httpMethod)
+    try {
+    updateActivity() // Keep function warm
+    console.log('Secure function called:', event.httpMethod, 'Total expenses:', expenses.length)
 
     switch (event.httpMethod) {
       case 'GET':

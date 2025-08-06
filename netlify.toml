@@ -2,6 +2,12 @@
   publish = "dist"
   functions = "netlify/functions"
 
+[functions]
+  # Keep functions warm longer to preserve in-memory data
+  timeout = 30
+  # Increase memory allocation for better performance
+  memory = 1024
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
